@@ -59,6 +59,11 @@ body {
     display: flex;
     gap: 24px;
 }
+button{
+    display: block;
+    unicode-bidi: isolate;
+    height: 30px !important;
+}
 .button {
     padding: 5px 16px;
     line-height: 20px;

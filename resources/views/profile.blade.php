@@ -1,47 +1,74 @@
 @extends('layouts.app')
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+@endsection
 @section('content')
 <div class="content">
     <h2>Мой профиль</h2>
 
     <div class="profile">
-        <div class="my-profile">
-            <div class="photo">
+        <form method="POST" action="{{route('profile')}}" enctype="multipart/form-data">
+            @csrf
+            @method('PATCH')
+            <div class="my-profile">
+                <div class="photo">
+                    <img src="{{Auth()->user()->photo}}">
+                </div>
+                <div class="info">
+                    <div class="info--nickname">{{Auth()->user()->name}}</div>
+                    <div>ID: {{Auth()->user()->id}}</div>
+                        <div class="input-group info--update-photo pointer">
+                            <div class="custom-file">
+                                <input hidden type="file" class="custom-file" id="photo" name="photo">
+                                <label class="custom-file" for="photo">Заменить фото</label>
+                            </div>
+                            @error('photo')
+                            <div class="text-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                </div>
             </div>
-            <div class="info">
-                <div class="info--nickname">Nickname</div>
-                <div>ID: 116933795</div>
-                <div class="info--update-photo pointer">Заменить фото</div>
-            </div>
-        </div>
-        <div class="update-data">
+            <div class="update-data">
             <div class="fields">
                 <div class="field">
                     <label class="field--label">Логин / Имя пользователя</label>
                     <div class="field--data">
-                        <input type="text" value="Nickname">
+                        <input type="text" name="name" value="{{ old('name', Auth()->user()->name) }}">
+                        @error('name')
+                        <div class="error-message">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
+
                 <div class="field">
                     <label class="field--label">Пароль</label>
                     <div class="field--data with-image">
-                        <input type="text" value="">
+                        <input type="password" name="password" value="" placeholder="Введите новый пароль">
                         <span class="private" onclick="showPassword(this)"></span>
+                        @error('password')
+                        <div class="error-message">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>
+
             <div class="fields">
                 <div class="field">
                     <label class="field--label">E-mail</label>
                     <div class="field--data">
-                        <input type="text" value="123456">
+                        <input type="text" name="email" value="{{ old('email', Auth()->user()->email) }}">
+                        @error('email')
+                        <div class="error-message">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="buttons">
-            <div class="button primary">Сохранить</div>
-            <div class="button">Сменить пароль</div>
-        </div>
+            </div>
+            <div class="buttons">
+                <button type="submit" class="button primary">Сохранить</button>
+                <div class="button">Сменить пароль</div>
+            </div>
+        </form>
     </div>
     <h2>Мои отзывы</h2>
     <div class="comment">

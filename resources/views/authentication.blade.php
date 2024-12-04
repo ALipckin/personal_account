@@ -6,17 +6,23 @@
                 <div id="auth" class="tab pointer active">Вход</div>
                 <div id="registration" class="tab pointer">Регистрация</div>
             </div>
-            <div id="auth-data" class="popup--fields">
+            <!-- Validation Errors -->
+            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+            <form method="POST" action="{{ route('login') }}" id="auth-data" class="popup--fields">
+                @csrf
                 <div class="field">
                     <label class="field--label">E-mail</label>
                     <div class="field--data">
-                        <input type="text" value="">
+                        <input id="email" class="block mt-1 w-full" type="email" name="email" required autofocus value="{{old('email')}}">
                     </div>
                 </div>
                 <div class="field">
                     <label class="field--label">Пароль</label>
                     <div class="field--data with-image">
-                        <input type="text" value="">
+                        <input id="password"
+                               type="password"
+                               name="password"
+                               required autocomplete="current-password" value="{{old('password')}}">
                         <span class="private" onclick="showPassword(this)"></span>
                     </div>
                 </div>
@@ -24,35 +30,42 @@
                     <a href="{{ route('password.recovery') }}">Забыли пароль?</a>
                 </div>
                 <div class="field">
-                    <div class="button primary">
+                    <button class="button primary">
                         Войти
-                    </div>
+                    </button>
                 </div>
-            </div>
-            <div id="registration-data" class="popup--fields no-display">
+            </form>
+            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+            <form id="registration-data" class="popup--fields no-display"  method="POST" action="{{ route('register') }}">
+                @csrf
                 <div class="field">
                     <label class="field--label">Логин / Имя пользователя</label>
                     <div class="field--data">
-                        <input type="text" value="">
+                        <input id="name" type="text" name="name" :value="old('name')" required autofocus >
                     </div>
                 </div>
                 <div class="field">
                     <label class="field--label">E-mail</label>
                     <div class="field--data">
-                        <input type="text" value="">
+                        <input id="email" type="email" name="email" :value="old('email')" required >
                     </div>
                 </div>
                 <div class="field">
                     <label class="field--label">Пароль</label>
                     <div class="field--data with-image">
-                        <input type="text" value="">
+                        <input id="password"
+                               type="password"
+                               name="password"
+                               required autocomplete="new-password" >
                         <span class="private" onclick="showPassword(this)"></span>
                     </div>
                 </div>
                 <div class="field">
                     <label class="field--label">Повторите пароль</label>
                     <div class="field--data with-image">
-                        <input type="text" value="">
+                        <input id="password_confirmation"
+                               type="password"
+                               name="password_confirmation" required>
                         <span class="private" onclick="showPassword(this)"></span>
                     </div>
                 </div>
@@ -61,11 +74,11 @@
                     <span>Я даю согласие на <a href="{{ route('privacy.policy') }}">обработку моих персональных данных</a></span>
                 </div>
                 <div class="field">
-                    <div class="button primary">
+                    <button class="button primary">
                         Зарегистрироваться
-                    </div>
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

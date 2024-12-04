@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\ProfileController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::get('/', function () {
     return view('index');
@@ -37,3 +45,13 @@ Route::get('/profile', function () {
     return view('profile');
 })->name('profile'); // Страница профиля пользователя
 
+Route::middleware('auth')
+    ->patch('/profile', [ProfileController::class, 'update'])
+    ->name('profile');
+
+Route::middleware('auth')
+    ->post('/profile/photo', [ProfileController::class, 'uploadPhoto'])
+    ->name('profile.photo.update');
+
+
+require __DIR__.'/auth.php';

@@ -51,11 +51,6 @@ function showPassword(element) {
 }
 
 window.onload = function() {
-    $("#header").load('./components/header.html');
-    $("#menu").load('./components/menu.html');
-    $("#add-comment").load('./components/add-comment.html');
-    $("#footer").load('./components/footer.html');
-
     setTimeout(function() {
         isAuthorized()
     }, 10);
