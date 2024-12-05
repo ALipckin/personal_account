@@ -2,9 +2,6 @@
     <link rel="stylesheet" href="{{ asset('css/comments.css') }}">
 @endsection
 
-@section('scripts')
-    <script src="{{ asset('scripts/comments.js') }}"></script>
-@endsection
 @extends('layouts.app')
 
 @section('content')
@@ -58,8 +55,14 @@
 
         <div class="filters">
             <div class="search">
-                <img src="{{ asset('image/Magnifier.svg') }}" />
-                <input type="text" placeholder="Найти..." />
+                <img src="{{ asset('image/Magnifier.svg') }}" alt="Поиск" />
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Найти..."
+                    onkeydown="handleSearch(event)"
+                    value="{{request('search')}}"
+                />
             </div>
             <div class="field">
                 <div class="sort">
@@ -67,93 +70,48 @@
                     <span onclick="updateSort()" id="sort" class="up">по дате <img src="{{ asset('image/arrow-wrapper-black.svg') }}"></span>
                 </div>
                 <div class="all-count">
-                    Найден(о) N отзыв(а/ов)
+                    Найден(о) {{$comments->total ?? 0}} отзыв(а/ов)
                 </div>
             </div>
         </div>
 
-        <!--  циклом выдавать сюда отзывы  -->
-        <div class="comment">
-            <div class="person">
+        @foreach($comments as $comment)
+            <div class="comment">
+                <div class="person">
                             <span class="person--icon">
                                 <img src="{{ asset('image/Union.png') }}">
                             </span>
-                <span class="person--nickname">Nickname</span>
-            </div>
-            <div class="date">
-                07.10.2022
-            </div>
-            <div class="comment--title">
-                Прототип нового сервиса — это как треск разлетающихся скреп!
-            </div>
-            <div class="comment--data">
-                Вот вам яркий пример современных тенденций — постоянное информационно-пропагандистское обеспечение нашей деятельности не оставляет шанса для новых принципов формирования материально-технической и кадровой базы. Мы вынуждены отталкиваться от того, что сплочённость команды профессионалов говорит о возможностях существующих финансовых и административных условий. И нет сомнений, что базовые сценарии поведения пользователей функционально разнесены на независимые элементы.
-            </div>
-            <div class="buttons">
-                <div class="button" onclick="showAll()">Читать весь отзыв</div>
-            </div>
-        </div>
-        <div class="comment">
-            <div class="person">
-                            <span class="person--icon">
-                                <img src="{{ asset('image/Union.png') }}">
-                            </span>
-                <span class="person--nickname">Nickname</span>
-            </div>
-            <div class="date">
-                07.10.2022
-            </div>
-            <div class="comment--title">
-                Прототип нового сервиса — это как треск разлетающихся скреп!
-            </div>
-            <div class="comment--data">
-                Вот вам яркий пример современных тенденций — постоянное информационно-пропагандистское обеспечение нашей деятельности не оставляет шанса для новых принципов формирования материально-технической и кадровой базы. Мы вынуждены отталкиваться от того, что сплочённость команды профессионалов говорит о возможностях существующих финансовых и административных условий. И нет сомнений, что базовые сценарии поведения пользователей функционально разнесены на независимые элементы.
-            </div>
-            <div class="buttons">
-                <div class="button with-image" onclick="updateComment()">
-                    <img src="{{ asset('image/Review.svg') }}" />
-                    Редактировать отзыв
+                    <span class="person--nickname">{{$comment->user->name}}</span>
                 </div>
-                <div class="button" onclick="showAll()">Читать весь отзыв</div>
+                <div class="date">
+                    {{$comment->timestamp}}
+                </div>
+                <div class="comment--title">
+                    {{$comment->title}}
+                </div>
+                <div class="comment--data">
+                    {{$comment->text}}
+                </div>
+                <div class="buttons">
+                    <div class="button" onclick="showAll()">Читать весь отзыв</div>
+                </div>
             </div>
-        </div>
-        <div class="comment">
-            <div class="person">
-                            <span class="person--icon">
-                                <img src="{{ asset('image/Union.png') }}">
-                            </span>
-                <span class="person--nickname">Nickname</span>
-            </div>
-            <div class="date">
-                07.10.2022
-            </div>
-            <div class="comment--title">
-                Прототип нового сервиса — это как треск разлетающихся скреп!
-            </div>
-            <div class="comment--data">
-                Вот вам яркий пример современных тенденций — постоянное информационно-пропагандистское обеспечение нашей деятельности не оставляет шанса для новых принципов формирования материально-технической и кадровой базы. Мы вынуждены отталкиваться от того, что сплочённость команды профессионалов говорит о возможностях существующих финансовых и административных условий. И нет сомнений, что базовые сценарии поведения пользователей функционально разнесены на независимые элементы.
-            </div>
-            <div class="buttons">
-                <div class="button" onclick="showAll()">Читать весь отзыв</div>
-            </div>
-        </div>
+        @endforeach
+    </div>
+    {{ $comments->links('vendor.pagination.default') }}
+@endsection
 
-    </div>
-    <div class="pagination">
-        <pages>
-            <img src="{{ asset('image/arrow-today.svg') }}">
-            <page class="active">1</page>
-            <page>2</page>
-            <page>3</page>
-            <page class="no-active">...</page>
-            <page>9</page>
-            <img class="last" src="{{ asset('image/arrow-today.svg') }}">
-        </pages>
-        <counts>
-            Показывать по:
-            <count>10</count>
-            <count class="active">20</count>
-            <count>50</count>
-        </counts>
-    </div>
+@section('scripts')
+    <script src="{{ asset('scripts/comments.js') }}"></script>
+    <script>
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                const searchQuery = event.target.value.trim(); // Получаем текст из input
+                if (searchQuery) {
+                    // Перенаправляем на URL с параметром поиска
+                    window.location.href = `/comments?search=${encodeURIComponent(searchQuery)}`;
+                }
+            }
+        }
+    </script>
 @endsection

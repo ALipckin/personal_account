@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ProfileController;
+use \App\Http\Controllers\CommentsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,9 +26,7 @@ Route::get('/', function () {
     return view('index');
 })->name('home'); // Главная страница
 
-Route::get('/comments', function () {
-    return view('comments');
-})->name('comments'); // Страница с комментариями
+Route::get('/comments', [CommentsController::class, 'index'])->name('comments');
 
 Route::get('/authentication', function () {
     return view('authentication');
