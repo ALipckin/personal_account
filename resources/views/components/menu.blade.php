@@ -13,8 +13,7 @@
     </div>
     <div
         class="menu--item pointer {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}"
-        authorized
-        onclick="window.location.href='{{ route('profile') }}'">
+        onclick="window.location.href='{{ route('profile') }}'" authorized>
         Мой профиль
     </div>
 </div>

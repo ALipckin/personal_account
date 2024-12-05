@@ -11,19 +11,16 @@
         <link rel="stylesheet" href="{{ asset('/css/popup.css') }}">
         @yield('styles')
 
-
         <!-- Scripts -->
 {{--        @vite(['resources/css/app.css', 'resources/js/app.js'])--}}
     </head>
     <body class="font-sans antialiased">
-        @include('components.base')
         @include('components.header')
         @include('components.menu')
         @yield('content')
         @include('components.footer')
-
     </body>
     <script src="{{ asset('js/jquery3.6.4.min.js') }}"></script>
-    <script src="{{ asset('scripts/base.js') }}"></script>
+    @include('components.base')
     @yield('scripts')
 </html>

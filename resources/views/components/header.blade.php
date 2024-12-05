@@ -10,21 +10,21 @@
                 <span class="add--text">Добавить отзыв</span>
             </div>
 
-            @guest
+
                 <div class="button" onclick="window.location.href='{{ route('authentication') }}'" not-authorized>
                     Войти
                 </div>
-            @else
+
                 <div class="person pointer" onclick="openPersonPopup()" authorized>
                 <span class="person--icon">
                     <img src="{{ asset('image/Union.png') }}">
                 </span>
-                    <span class="person--nickname">{{ Auth::user()->nickname }}</span>
+                    <span class="person--nickname">{{ Auth::user()->name ?? null }}</span>
                 </div>
                 <div class="person-popup no-display" id="person-popup">
                     <img class="arrow" src="{{ asset('image/arrow-wrapper.svg') }}">
                     <div class="person-popup--items">
-                        <div class="item pointer" onclick="window.location.href='{{ route('profile') }}'">
+                        <div class="item pointer" onclick="window.location.href='{{ route('profile') }}'" >
                             <img src="{{ asset('image/mdi_account-outline.svg') }}">
                             Мой профиль
                         </div>
@@ -39,7 +39,6 @@
                         </div>
                     </div>
                 </div>
-            @endguest
         </div>
     </div>
 </header>

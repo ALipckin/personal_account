@@ -5,7 +5,7 @@ services:
             - ./:/var/www
             - ./_docker/nginx/conf.d:/etc/nginx/conf.d
         ports:
-            - "8877:80"
+            - "8876:80"
         depends_on:
             - app
         container_name: test_app_nginx
@@ -26,9 +26,9 @@ services:
         volumes:
             - ./tmp/db:/var/lib/mysql
         environment:
-            MYSQL_DATABASE: ttk
+            MYSQL_DATABASE: test_db
             MYSQL_ROOT_PASSWORD: root
         ports:
-            - 8101:3306
+            - 8105:3306
         command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
         container_name: test_db
