@@ -40,17 +40,17 @@ Route::get('/privacy-policy', function () {
     return view('privacy-policy');
 })->name('privacy.policy'); // Страница политики конфиденциальности
 
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile'); // Страница профиля пользователя
+Route::group(['namespace' => 'profile', 'prefix' => 'profile', 'middleware' => 'auth'], function() {
+    Route::get('/', [ProfileController::class, 'index'])
+        ->name('profile.index');
 
-Route::middleware('auth')
-    ->patch('/profile', [ProfileController::class, 'update'])
-    ->name('profile');
+    Route::patch('/', [ProfileController::class, 'update'])
+        ->name('profile.update');
 
-Route::middleware('auth')
-    ->post('/profile/photo', [ProfileController::class, 'uploadPhoto'])
-    ->name('profile.photo.update');
-
+    Route::post('/check-password', [ProfileController::class, 'checkMyPassword'])
+        ->name('profile.password.check');
+    Route::post('/change-password', [ProfileController::class, 'changeMyPassword'])
+        ->name('profile.password.change');;
+});
 
 require __DIR__.'/auth.php';

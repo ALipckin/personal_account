@@ -3,6 +3,7 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateRequest extends FormRequest
 {
@@ -21,12 +22,13 @@ class UpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
+        // Проверка, если пользователь не авторизован
+        $userId = Auth::check() ? Auth::id() : null;
         return [
-            'email' => 'required|string|email|unique:users,email,' . $this->user_id,
-            'photo' => 'image|mimes:jpg,jpeg,png|max:2048',
-            //'password' => 'required|min:8',
+            'email' => 'required|string|email|unique:users,email,' . $userId,
+            'photo' => 'nullable|file',
             'name' => 'required|string',
         ];
     }

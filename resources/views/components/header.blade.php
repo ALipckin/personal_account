@@ -24,7 +24,7 @@
                 <div class="person-popup no-display" id="person-popup">
                     <img class="arrow" src="{{ asset('image/arrow-wrapper.svg') }}">
                     <div class="person-popup--items">
-                        <div class="item pointer" onclick="window.location.href='{{ route('profile') }}'" >
+                        <div class="item pointer" onclick="window.location.href='{{ route('profile.index') }}'" >
                             <img src="{{ asset('image/mdi_account-outline.svg') }}">
                             Мой профиль
                         </div>
