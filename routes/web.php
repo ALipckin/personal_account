@@ -18,9 +18,9 @@ use \App\Http\Controllers\CommentsController;
 //    return view('welcome');
 //});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+//Route::get('/dashboard', function () {
+//    return view('dashboard');
+//})->middleware(['auth'])->name('dashboard');
 
 Route::get('/', function () {
     return view('index');
@@ -30,7 +30,7 @@ Route::get('/comments', [CommentsController::class, 'index'])->name('comments');
 
 Route::get('/authentication', function () {
     return view('authentication');
-})->name('authentication'); // Страница авторизации
+})->name('auth.login'); // Страница авторизации
 
 Route::get('/password-recovery', function () {
     return view('password-recovery');

@@ -6,22 +6,26 @@
                 <h2>Восстановление пароля</h2>
                 <div>Введите свою почту и мы отправим Вам ссылку на восстановление пароля</div>
             </div>
-            <div id="auth-data" class="popup--fields">
-                <div class="field">
+            <!-- Validation Errors -->
+            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+            <form method="POST" action="{{ route('password.email') }}" id="auth-data" class="popup--fields">
+                @csrf
+               <div class="field">
                     <label class="field--label">E-mail</label>
                     <div class="field--data">
-                        <input type="text" value="">
+                        <input id="email" class="block mt-1 w-full" type="email" name="email"
+                               required autofocus>
                     </div>
                 </div>
                 <div class="field buttons">
                     <div class="button">
                         Назад
                     </div>
-                    <div class="button primary">
+                    <button class="button primary">
                         Далее
-                    </div>
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

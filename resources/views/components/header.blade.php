@@ -11,7 +11,7 @@
             </div>
 
 
-                <div class="button" onclick="window.location.href='{{ route('authentication') }}'" not-authorized>
+                <div class="button" onclick="window.location.href='{{ route('auth.login') }}'" not-authorized>
                     Войти
                 </div>
 
@@ -33,7 +33,7 @@
                             Политика конфиденциальности
                         </div>
                         <div class="hr"></div>
-                        <div class="item pointer" onclick="window.location.href='{{ route('logout') }}'">
+                        <div class="item pointer" onclick="logout()">
                             <img src="{{ asset('image/mdi_exit-to-app.svg') }}">
                             Выйти
                         </div>
@@ -42,3 +42,25 @@
         </div>
     </div>
 </header>
+<script>
+    function logout() {
+        fetch('{{ route('logout') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Добавление CSRF-токена для безопасности
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Успешный выход — перенаправляем пользователя
+                    window.location.href = '/login'; // Измените на нужный роут
+                } else {
+                    console.error('Ошибка при выходе', response);
+                }
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+    }
+</script>
