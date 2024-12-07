@@ -14,14 +14,13 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->unsignedBigInteger('user_id')->nullable(); // Foreign key for users
-            $table->string('title'); // Title of the feedback
-            $table->text('text'); // Text of the feedback
-            $table->boolean('recommended')->default(false); // Recommended or not
-            $table->timestamps(); // Created at and updated at
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('title');
+            $table->text('text');
+            $table->boolean('recommended')->default(false);
+            $table->timestamps();
 
-            // Add foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

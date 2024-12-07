@@ -161,7 +161,10 @@ return [
         'name' => 'Имя пользователя',
         'password' => 'пароль',
         'new_password' => 'новый пароль',
-        'current_password' => 'текущий пароль'
+        'current_password' => 'текущий пароль',
+        'recommended' => 'рекоммендация',
+        'text' => 'отзыв',
+        'title' => 'заголовок'
     ],
 
 ];

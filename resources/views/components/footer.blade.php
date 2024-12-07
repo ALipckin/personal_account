@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="{{asset('/css/footer.css')}}">
 <footer id="footer" class="footer">
     <div class="left-block">
         <img src="{{ asset('image/H_7%20semibold.png') }}">

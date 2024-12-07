@@ -7,7 +7,7 @@
         <div class="right-block">
             <div class="button primary" onclick="openPopup()">
                 <img class="add--icon" src="{{ asset('image/Plus.png') }}">
-                <span class="add--text">Добавить отзыв</span>
+                <span class="add--text show-add-comment" onclick="openPopup()">Добавить отзыв</span>
             </div>
 
 
@@ -42,25 +42,28 @@
         </div>
     </div>
 </header>
+
 <script>
-    function logout() {
-        fetch('{{ route('logout') }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Добавление CSRF-токена для безопасности
-            },
-        })
-            .then(response => {
-                if (response.ok) {
-                    // Успешный выход — перенаправляем пользователя
-                    window.location.href = '/login'; // Измените на нужный роут
-                } else {
-                    console.error('Ошибка при выходе', response);
-                }
+    window.onload = function () {
+        function logout() {
+            fetch('{{ route('logout') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Добавление CSRF-токена для безопасности
+                },
             })
-            .catch(error => {
-                console.error('Произошла ошибка:', error);
-            });
-    }
+                .then(response => {
+                    if (response.ok) {
+                        // Успешный выход — перенаправляем пользователя
+                        window.location.href = '/login'; // Измените на нужный роут
+                    } else {
+                        console.error('Ошибка при выходе', response);
+                    }
+                })
+                .catch(error => {
+                    console.error('Произошла ошибка:', error);
+                });
+        }
+    };
 </script>

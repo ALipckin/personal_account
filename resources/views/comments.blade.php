@@ -5,7 +5,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div id="popup-comment" class="add-comment popup-comment no-display">
+    <div id="popup-comment" class="add-comment popup-comment modal no-display">
         <div class="comment-form">
             <div class="popup--title">
                 Отзыв

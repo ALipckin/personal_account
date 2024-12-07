@@ -58,14 +58,27 @@
     }
 
     window.onload = function() {
-        // $("#header").load('./components/header.html');
-        // $("#menu").load('./components/menu.html');
-        // $("#add-comment").load('./components/add-comment.html');
-        // $("#footer").load('./components/footer.html');
-
         setTimeout(function() {
             isAuthorized()
         }, 10);
     };
 
+    function removeError(field){
+        const passwordField = document.querySelector(field);
+        const errorMessage = passwordField.querySelector('.error-message');
+        errorMessage.textContent = "";
+        passwordField.classList.remove('border-red');
+    }
+
+    function setError(field, text){
+        const passwordField = document.querySelector(field);
+        const errorMessage = passwordField.querySelector('.error-message');
+        // Добавляем класс для отображения ошибки
+        passwordField.classList.add('border-red');  // Добавляем красную рамку, например, для выделения ошибки
+
+        if (errorMessage) {
+            // Вставляем текст ошибки в div с классом error-message
+            errorMessage.textContent = text;  // Текст ошибки
+        }
+    }
 </script>

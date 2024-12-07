@@ -26,7 +26,6 @@ Route::get('/', function () {
     return view('index');
 })->name('home'); // Главная страница
 
-Route::get('/comments', [CommentsController::class, 'index'])->name('comments');
 
 Route::get('/authentication', function () {
     return view('authentication');
@@ -52,6 +51,13 @@ Route::group(['namespace' => 'profile', 'prefix' => 'profile', 'middleware' => '
 
     Route::post('/check-password', [ProfileController::class, 'checkMyPassword'])
         ->name('profile.password.check');
+});
+
+Route::get('/comments', [CommentsController::class, 'index'])->name('comments');
+
+Route::group(['namespace' => 'comment', 'prefix' => 'comment', 'middleware' => 'auth'], function() {
+    Route::post('/create', [CommentsController::class, 'store'])
+        ->name('comment.create');
 });
 
 require __DIR__.'/auth.php';

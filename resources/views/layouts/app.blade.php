@@ -9,6 +9,8 @@
 
         <link rel="stylesheet" href="{{ asset('/css/base.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/popup.css') }}">
+        <link rel="stylesheet" href="{{ asset('/css/comments.css') }}">
+        <link rel="stylesheet" href="{{asset('/css/footer.css')}}">
         @yield('styles')
 
         <!-- Scripts -->
@@ -17,6 +19,7 @@
     <body class="font-sans antialiased">
         @include('components.header')
         @include('components.menu')
+        @include('components.add-comment')
         @yield('content')
         @include('components.footer')
     </body>

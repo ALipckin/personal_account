@@ -118,6 +118,7 @@ input:focus-visible, textarea:focus-visible {
 }
 .field .field--data.with-image {
     position: relative;
+    z-index: 10;
 }
 
 .field {
@@ -143,11 +144,13 @@ input:focus-visible, textarea:focus-visible {
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.30);
+    z-index: 100;
 }
 .add-comment .comment-form {
     margin: 60px calc(50% - 500px);
     width: 1000px;
     background: #FFF;
+    z-index: 100;
 }
 .popup--title {
     padding: 14px 32px;
@@ -191,4 +194,8 @@ input:focus-visible, textarea:focus-visible {
 }
 .border-red{
     border-color:red !important;
+}
+.modal{
+    position: fixed;
+    z-index: 1000;
 }
