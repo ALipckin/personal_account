@@ -39,7 +39,7 @@ class CommentsController
                 'text' => 'required|string|max:1000',
                 'recommended' => 'nullable|boolean',
             ]);
-            $validatedData['user_id'] = Auth::id();
+            $validatedData['user_id'] = Auth::id() ?? null;
             $comment = new Comment();
             $comment->fill($validatedData);
             $comment->save();

@@ -67,4 +67,5 @@ window.onload = function () {
 
     // Проверяем параметр registration при загрузке страницы
     checkRegistrationParameter();
+
 };

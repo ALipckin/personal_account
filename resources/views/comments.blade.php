@@ -86,7 +86,7 @@
                                 <img src="{{ asset('image/Union.png') }}">
                             </span>
                           @endif
-                    <span class="person--nickname">{{$comment->user->name}}</span>
+                    <span class="person--nickname">{{$comment->user->name ?? "Гость"}}</span>
                 </div>
                 <div class="date">
                     {{$comment->created_at->format('Y-m-d')}}
@@ -98,7 +98,7 @@
                     {{$comment->text}}
                 </div>
                 <div class="buttons">
-                    <div class="button" onclick="openFullCommentModal('{{ $comment->user->name }}', '{{ $comment->user->photo }}', '{{ $comment->title }}', '{{ $comment->text }}' )">Читать весь отзыв</div>
+                    <div class="button" onclick="openFullCommentModal('{{ $comment->user->name ?? "Гость"}}', '{{ $comment->user->photo ?? null }}', '{{ $comment->title }}', '{{ $comment->text }}' )">Читать весь отзыв</div>
                 </div>
             </div>
         @endforeach

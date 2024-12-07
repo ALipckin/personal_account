@@ -54,10 +54,8 @@ Route::group(['namespace' => 'profile', 'prefix' => 'profile', 'middleware' => '
 });
 
 Route::get('/comments', [CommentsController::class, 'index'])->name('comments');
+Route::post('comment/create', [CommentsController::class, 'store'])
+    ->name('comment.create');
 
-Route::group(['namespace' => 'comment', 'prefix' => 'comment', 'middleware' => 'auth'], function() {
-    Route::post('/create', [CommentsController::class, 'store'])
-        ->name('comment.create');
-});
 
 require __DIR__.'/auth.php';

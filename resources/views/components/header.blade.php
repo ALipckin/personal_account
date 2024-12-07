@@ -46,28 +46,25 @@
         </div>
     </div>
 </header>
-
 <script>
-    window.onload = function () {
-        function logout() {
-            fetch('{{ route('logout') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Добавление CSRF-токена для безопасности
-                },
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // Успешный выход — перенаправляем пользователя
-                        window.location.href = '/login'; // Измените на нужный роут
-                    } else {
-                        console.error('Ошибка при выходе', response);
-                    }
-                })
-                .catch(error => {
-                    console.error('Произошла ошибка:', error);
-                });
-        }
-    };
+    function logout() {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                '_token': '{{ csrf_token() }}' // передаем токен в теле запроса
+            }),
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                console.error('Ошибка при выходе', response);
+            }
+        })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
+    }
 </script>

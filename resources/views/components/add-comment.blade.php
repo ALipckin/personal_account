@@ -45,7 +45,7 @@
 
         <!-- Footer -->
         <div class="comment--footer buttons">
-            <button type="button" class="button primary" authorized id="submitComment">Отправить отзыв</button>
+            <button type="button" class="button primary" id="submitComment">Отправить отзыв</button>
             <div class="button" onclick="closePopup()">Назад</div>
         </div>
     </form>
