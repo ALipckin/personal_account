@@ -44,10 +44,16 @@
 
     function showPassword(element) {
         let show = $(element).attr('class');
+        const target = $(element).closest('div').find('.password');  // Находим целевой элемент через класс
+
         if (show.indexOf('private-off') >= 0) {
             $(element).removeClass('private-off');
+            // Скрыть пароль
+            target.attr('type', 'password');
         } else {
             $(element).addClass('private-off');
+            // Показать пароль
+            target.attr('type', 'text');
         }
     }
 
