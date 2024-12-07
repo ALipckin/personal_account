@@ -12,7 +12,7 @@
         Отзывы
     </div>
     <div
-        class="menu--item pointer {{ Route::currentRouteName() === 'profile' ? 'active' : '' }}"
+        class="menu--item pointer {{ Route::currentRouteName() === 'profile.index' ? 'active' : '' }}"
         onclick="window.location.href='{{ route('profile.index') }}'" authorized>
         Мой профиль
     </div>

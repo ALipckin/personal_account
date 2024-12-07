@@ -1,46 +1,50 @@
-@if ($paginator->hasPages())
-    <nav>
-        <ul class="pagination">
-            {{-- Previous Page Link --}}
-            @if ($paginator->onFirstPage())
-                <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
-                    <span aria-hidden="true">&lsaquo;</span>
-                </li>
-            @else
-                <li>
-                    <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
-                </li>
+<div class="pagination">
+    <div class="pages">
+        @if ($paginator->onFirstPage())
+            <a>
+                <img src="{{ asset('image/arrow-today.svg') }}" class="disabled" alt="Previous">
+            </a>
+        @else
+            <a href="{{ $paginator->previousPageUrl() }}">
+                <img src="{{ asset('image/arrow-today.svg') }}" alt="Previous">
+            </a>
+        @endif
+
+        @foreach ($elements as $element)
+            @if (is_string($element))
+                <span class="no-active">{{ $element }}</span>
             @endif
 
-            {{-- Pagination Elements --}}
-            @foreach ($elements as $element)
-                {{-- "Three Dots" Separator --}}
-                @if (is_string($element))
-                    <li class="disabled" aria-disabled="true"><span>{{ $element }}</span></li>
-                @endif
-
-                {{-- Array Of Links --}}
-                @if (is_array($element))
-                    @foreach ($element as $page => $url)
-                        @if ($page == $paginator->currentPage())
-                            <li class="active" aria-current="page"><span>{{ $page }}</span></li>
-                        @else
-                            <li><a href="{{ $url }}">{{ $page }}</a></li>
-                        @endif
-                    @endforeach
-                @endif
-            @endforeach
-
-            {{-- Next Page Link --}}
-            @if ($paginator->hasMorePages())
-                <li>
-                    <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
-                </li>
-            @else
-                <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
-                    <span aria-hidden="true">&rsaquo;</span>
-                </li>
+            @if (is_array($element))
+                @foreach ($element as $page => $url)
+                    @if ($page == $paginator->currentPage())
+                        <span class="active">{{ $page }}</span>
+                    @else
+                        <a href="{{ $url }}">{{ $page }}</a>
+                    @endif
+                @endforeach
             @endif
-        </ul>
-    </nav>
-@endif
+        @endforeach
+
+        @if ($paginator->hasMorePages())
+            <a href="{{ $paginator->nextPageUrl() }}">
+                <img class="last" src="{{ asset('image/arrow-today.svg') }}" alt="Next">
+            </a>
+        @else
+            <a>
+                <img src="{{ asset('image/arrow-today.svg') }}" class="disabled last" alt="Next">
+            </a>
+        @endif
+    </div>
+
+    <div class="counts">
+        <span>Показывать по:</span>
+        @foreach ([10, 20, 50] as $count)
+            @if ($count == request('per_page')) {{-- Укажите значение по умолчанию --}}
+            <span class="count active">{{ $count }}</span>
+            @else
+                <a class="count" href="{{ request()->fullUrlWithQuery(['per_page' => $count]) }}">{{ $count }}</a>
+            @endif
+        @endforeach
+    </div>
+</div>

@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="{{ asset('/css/popup.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/comments.css') }}">
         <link rel="stylesheet" href="{{asset('/css/footer.css')}}">
+        <link rel="stylesheet" href="{{asset('/css/comments.css')}}">
         @yield('styles')
 
         <!-- Scripts -->

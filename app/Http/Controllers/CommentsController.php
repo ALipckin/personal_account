@@ -9,20 +9,28 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController
 {
-    public function index(Request $request){
-        $perPage = $request->input('per_page', 4);
-        $search = $request->input('search');
+    public function index(Request $request) {
+        $perPage = $request->input('per_page', 4);  // Количество комментариев на странице
+        $search = $request->input('search');  // Параметр поиска
+        $sort = $request->input('sort', 'asc');  // Направление сортировки по умолчанию 'asc'
 
-        $comments = Comment::query()
-            ->when($search, function ($query) use ($search) {
-                $query->where('title', 'LIKE', '%' . $search . '%')
-                    ->orWhere('text', 'LIKE', '%' . $search . '%');
-            })
-            ->paginate($perPage);
+        // Создаем запрос для получения комментариев
+        $commentsQuery = Comment::query();
+
+        // Применяем поиск, если он есть
+        if ($search) {
+            $commentsQuery->where('title', 'LIKE', '%' . $search . '%')
+                ->orWhere('text', 'LIKE', '%' . $search . '%');
+        }
+
+        // Применяем сортировку по дате
+        $commentsQuery->orderBy('created_at', $sort);
+
+        // Пагинация
+        $comments = $commentsQuery->paginate($perPage);
 
         return view('comments', compact('comments'));
     }
-
     public function store(Request $request)
     {
         try {

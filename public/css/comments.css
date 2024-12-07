@@ -51,11 +51,11 @@
     display: flex;
     background-color: #FFF;
 }
-.pagination pages {
+.pagination .pages {
     display: flex;
     gap: 8px;
 }
-.pagination pages page {
+.pagination .pages page {
     width: 23px;
     height: 23px;
     display: inline-block;
@@ -65,31 +65,31 @@
     font-size: 12px;
     cursor: pointer;
 }
-.pagination pages img {
+.pagination .pages img {
     cursor: pointer;
 }
-.pagination pages page.active {
+.pagination .pages page.active {
     border: 1px solid var(--blue-blue, #1540A0);
     color: var(--blue-blue, #1540A0);
     cursor: default;
 }
-.pagination pages page.no-active {
+.pagination .pages page.no-active {
     cursor: default;
 }
-.pagination pages img.last {
+.pagination .pages img.last {
     transform: rotate(180deg);
 }
-.pagination counts {
+.pagination .counts {
     margin-left: auto;
     color: var(--black-black-06, #747474);
     display: flex;
     gap: 8px;
     line-height: 25px;
 }
-.pagination counts count {
+.pagination .counts .count {
     cursor: pointer;
 }
-.pagination counts count.active {
+.pagination .counts .count.active {
     color: var(--blue-blue, #1540A0);
     cursor: default;
 }

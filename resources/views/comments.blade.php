@@ -5,6 +5,7 @@
 @extends('layouts.app')
 
 @section('content')
+    @include('components.popup-comment')
     <div id="popup-comment" class="add-comment popup-comment modal no-display">
         <div class="comment-form">
             <div class="popup--title">
@@ -67,10 +68,10 @@
             <div class="field">
                 <div class="sort">
                     Показывать:
-                    <span onclick="updateSort()" id="sort" class="up">по дате <img src="{{ asset('image/arrow-wrapper-black.svg') }}"></span>
+                    <span onclick="updateSort()" id="sort" class="{{request('sort') == 'desc' ? 'up' : 'down'}}">по дате <img src="{{ asset('image/arrow-wrapper-black.svg') }}"></span>
                 </div>
                 <div class="all-count">
-                    Найден(о) {{$comments->total ?? 0}} отзыв(а/ов)
+                    Найден(о) {{$comments->total()}} отзыв(а/ов)
                 </div>
             </div>
         </div>
@@ -78,13 +79,17 @@
         @foreach($comments as $comment)
             <div class="comment">
                 <div class="person">
+                        @if(isset($comment->user->photo))
+                            <img class="person--img" src="{{$comment->user->photo}}">
+                        @else
                             <span class="person--icon">
                                 <img src="{{ asset('image/Union.png') }}">
                             </span>
+                          @endif
                     <span class="person--nickname">{{$comment->user->name}}</span>
                 </div>
                 <div class="date">
-                    {{$comment->timestamp}}
+                    {{$comment->created_at->format('Y-m-d')}}
                 </div>
                 <div class="comment--title">
                     {{$comment->title}}
@@ -93,12 +98,13 @@
                     {{$comment->text}}
                 </div>
                 <div class="buttons">
-                    <div class="button" onclick="showAll()">Читать весь отзыв</div>
+                    <div class="button" onclick="openFullCommentModal('{{ $comment->user->name }}', '{{ $comment->user->photo }}', '{{ $comment->title }}', '{{ $comment->text }}' )">Читать весь отзыв</div>
                 </div>
             </div>
         @endforeach
     </div>
-    {{ $comments->links('vendor.pagination.default') }}
+    {{ $comments->appends(['sort' => request('sort'), 'search' => request('search'), 'per_page' => request('per_page')])
+    ->links('vendor.pagination.default') }}
 @endsection
 
 @section('scripts')

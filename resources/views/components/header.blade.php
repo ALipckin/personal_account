@@ -16,9 +16,13 @@
                 </div>
 
                 <div class="person pointer" onclick="openPersonPopup()" authorized>
-                <span class="person--icon">
-                    <img src="{{ asset('image/Union.png') }}">
-                </span>
+                    @if(isset(auth()->user()->photo))
+                        <img class="person--img" src="{{auth()->user()->photo}}">
+                    @else
+                        <span class="person--icon">
+                        <img src="{{ asset('/image/Union.png') }}">
+                    </span>
+                    @endif
                     <span class="person--nickname">{{ Auth::user()->name ?? null }}</span>
                 </div>
                 <div class="person-popup no-display" id="person-popup">

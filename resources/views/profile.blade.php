@@ -1,13 +1,6 @@
 @extends('layouts.app')
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
-    <style>
-        .person--img{
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-        }
-    </style>
 @endsection
 @section('content')
     @include('components.popup-comment')
@@ -122,7 +115,7 @@
                     {{$comment->text}}
                 </div>
                 <div class="buttons">
-                    <div class="button" onclick="openFullCommentModal('{{ $comment->user->name }}', '{{ $comment->title }}', '{{ $comment->text }}')">Читать весь отзыв</div>
+                    <div class="button" onclick="openFullCommentModal('{{ $comment->user->name }}', '{{ $comment->user->photo }}', '{{ $comment->title }}', '{{ $comment->text }}')">Читать весь отзыв</div>
                 </div>
             </div>
         @endforeach
@@ -134,21 +127,6 @@
 @endsection
 @section('scripts')
     <script>
-        function openFullCommentModal(nickname, title, text) {
-            console.log("open modal")
-            // Заполняем модальное окно данными
-            document.querySelector('#popup-comment .person--nickname').textContent = nickname;
-            document.querySelector('#popup-comment .comment--title').textContent = title;
-            document.querySelector('#popup-comment .comment--data').textContent = text;
-            document.querySelector('#popup-comment .comment--data').textContent = text;
-            @if(isset($comment->user->photo))
-                document.querySelector('#popup-comment .comment--person-icon').innerHTML =
-                    '<img class="person--img" src="{{$comment->user->photo}}">';
-            @endif
-            // Показываем модальное окно
-            document.getElementById('popup-comment').classList.remove('no-display');
-        }
-
         document.getElementById('change-password-btn').addEventListener('click', function() {
             var currentPassword = document.getElementById('current_password').value;
             const passwordField = document.querySelector('#curr-password-field');

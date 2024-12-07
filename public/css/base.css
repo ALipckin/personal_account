@@ -199,3 +199,9 @@ input:focus-visible, textarea:focus-visible {
     position: fixed;
     z-index: 1000;
 }
+
+.person--img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
