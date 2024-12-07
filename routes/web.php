@@ -47,10 +47,11 @@ Route::group(['namespace' => 'profile', 'prefix' => 'profile', 'middleware' => '
     Route::patch('/', [ProfileController::class, 'update'])
         ->name('profile.update');
 
-    Route::post('/check-password', [ProfileController::class, 'checkMyPassword'])
-        ->name('profile.password.check');
     Route::post('/change-password', [ProfileController::class, 'changeMyPassword'])
         ->name('profile.password.change');;
+
+    Route::post('/check-password', [ProfileController::class, 'checkMyPassword'])
+        ->name('profile.password.check');
 });
 
 require __DIR__.'/auth.php';

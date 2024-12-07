@@ -11,7 +11,9 @@
             @method('PATCH')
             <div class="my-profile">
                 <div class="photo">
-                    <img class="photo" src="{{Auth()->user()->photo ?? null}}">
+                    @if(isset(Auth()->user()->photo))
+                        <img class="photo" src="{{Auth()->user()->photo}}">
+                    @endif
                 </div>
                 <div class="info">
                     <div class="info--nickname">{{Auth()->user()->name}}</div>
@@ -41,18 +43,16 @@
 
                 <div class="field">
                     <label class="field--label">Пароль</label>
-                    <div class="field--data with-image">
-                        <input type="password" name="password" value="" id="current_password" placeholder="Введите пароль">
+                    <div class="field--data with-image" id="curr-password-field">
+                        <input class="password" type="password" name="password" value="" id="current_password" placeholder="Введите пароль">
                         <span class="private" onclick="showPassword(this)"></span>
-                        @error('password')
-                        <div class="error-message">{{ $message }}</div>
-                        @enderror
+                        <div class="error-message"></div>
                     </div>
                 </div>
             </div>
 
             <div class="fields">
-                <div class="field">
+                <div class="field" >
                     <label class="field--label">E-mail</label>
                     <div class="field--data">
                         <input type="text" name="email" value="{{ old('email', Auth()->user()->email) }}">
@@ -72,23 +72,19 @@
             <div id="new-password-fields" style="display: none;">
                 <div class="field">
                     <label class="field--label">Новый пароль</label>
-                    <div class="field--data with-image">
-                        <input type="password" id="new_password" name="new_password" value="" placeholder="Введите новый пароль">
+                    <div class="field--data with-image" id="new-password-field">
+                        <input class="password" type="password" id="new_password" name="new_password" value="" placeholder="Введите новый пароль">
                         <span class="private" onclick="showPassword(this)"></span>
-                        @error('new_password')
-                        <div class="error-message">{{ $message }}</div>
-                        @enderror
+                        <div class="error-message"></div>
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="field--label">Подтверждение пароля</label>
-                    <div class="field--data with-image">
-                        <input type="password" id="confirm_password" name="confirm_password" value="" placeholder="Подтвердите новый пароль">
+                    <div class="field--data with-image" id="confirm-password-field">
+                        <input class="password" type="password" id="confirm_password" name="confirm_password" value="" placeholder="Подтвердите новый пароль">
                         <span class="private" onclick="showPassword(this)"></span>
-                        @error('confirm_password')
-                        <div class="error-message">{{ $message }}</div>
-                        @enderror
+                        <div class="error-message"></div>
                     </div>
                 </div>
                 <button type="submit" class="button primary" id="save_password_btn">Сменить пароль</button>
@@ -130,6 +126,10 @@
     <script>
         document.getElementById('change-password-btn').addEventListener('click', function() {
             var currentPassword = document.getElementById('current_password').value;
+            const passwordField = document.querySelector('#curr-password-field');
+            const errorMessage = passwordField.querySelector('.error-message');
+            errorMessage.textContent = "";
+            passwordField.classList.remove('border-red');
 
             if(currentPassword) {
                 // Проверка текущего пароля через AJAX
@@ -150,48 +150,91 @@
                             // Если пароль правильный, показываем поля для ввода нового пароля
                             document.getElementById('new-password-fields').style.display = 'block';
                         } else {
-                            alert(data.error);  // Показать ошибку, если пароль неверный
+                            // Добавляем класс для отображения ошибки
+                            passwordField.classList.add('border-red');  // Добавляем красную рамку, например, для выделения ошибки
+
+                            if (errorMessage) {
+                                // Вставляем текст ошибки в div с классом error-message
+                                errorMessage.textContent = data.error;  // Текст ошибки
+                            }
                         }
                     })
                     .catch(error => console.error('Error:', error));
             }
             else{
-                alert("Введите пароль")
+                // Добавляем класс для отображения ошибки
+                passwordField.classList.add('border-red');  // Добавляем красную рамку, например, для выделения ошибки
+
+                if (errorMessage) {
+                    // Вставляем текст ошибки в div с классом error-message
+                    errorMessage.textContent = "Введите пароль";  // Текст ошибки
+                }
             }
         });
 
         document.getElementById('save_password_btn').addEventListener('click', function() {
             var newPassword = document.getElementById('new_password').value;
             var confirmPassword = document.getElementById('confirm_password').value;
+            const newPassId = '#new-password-field';
+            const confirmPassId = '#confirm-password-field';
+            removeError(newPassId);
+            removeError(confirmPassId);
+
             // Проверка, совпадают ли новые пароли
             if (newPassword !== confirmPassword) {
-                alert('Пароли не совпадают!');
+                setError(confirmPassId, 'Пароли не совпадают!');
                 return;
             }
 
-            // Отправка нового пароля на сервер
             fetch('{{ route("profile.password.change") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    // Обязательно передаем CSRF-токен
                 },
                 body: JSON.stringify({
                     current_password: document.getElementById('current_password').value,
                     new_password: newPassword
                 })
             })
-                .then(response => response.json())
+                .then(response => response.json())  // преобразуем ответ в JSON
                 .then(data => {
-                    if (data.success) {
+                    if (data.status_code === 422) {  // если ошибка валидации
+                        // Обрабатываем ошибку валидации для поля new_password
+                        if (data.message && data.message.new_password) {
+                            setError(newPassId, data.message.new_password[0]);  // отображаем сообщение
+                        } else {
+                            setError(newPassId, 'Неизвестная ошибка валидации');
+                        }
+                    } else if (data.success) {
                         alert('Пароль успешно изменен');
-                        document.getElementById('new-password-fields').style.display = 'none';
+                        $('#new-password-fields').hide();
                     } else {
-                        alert(data.error);  // Показать ошибку, если смена пароля не удалась
+                        setError(newPassId, data.error || 'Произошла ошибка при изменении пароля');
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    setError(newPassId, error.message || 'Произошла ошибка');
+                });
         });
+
+        function removeError(field){
+            const passwordField = document.querySelector(field);
+            const errorMessage = passwordField.querySelector('.error-message');
+            errorMessage.textContent = "";
+            passwordField.classList.remove('border-red');
+        }
+
+        function setError(field, text){
+            const passwordField = document.querySelector(field);
+            const errorMessage = passwordField.querySelector('.error-message');
+            // Добавляем класс для отображения ошибки
+            passwordField.classList.add('border-red');  // Добавляем красную рамку, например, для выделения ошибки
+
+            if (errorMessage) {
+                // Вставляем текст ошибки в div с классом error-message
+                errorMessage.textContent = text;  // Текст ошибки
+            }
+        }
     </script>
 @endsection

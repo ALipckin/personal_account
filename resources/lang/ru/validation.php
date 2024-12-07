@@ -124,7 +124,7 @@ return [
     'starts_with' => 'Поле :attribute должно начинаться с одного из следующих значений: :values.',
     'string' => 'Поле :attribute должно быть строкой.',
     'timezone' => 'Поле :attribute должно быть допустимой временной зоной.',
-    'unique' => 'Значение поля :attribute уже занято.',
+    'unique' => ':attribute уже занят.',
     'uploaded' => 'Не удалось загрузить :attribute.',
     'url' => 'Поле :attribute должно быть допустимым URL.',
     'uuid' => 'Поле :attribute должно быть допустимым UUID.',
@@ -160,5 +160,8 @@ return [
     'attributes' => [
         'name' => 'Имя пользователя',
         'password' => 'пароль',
+        'new_password' => 'новый пароль',
+        'current_password' => 'текущий пароль'
     ],
+
 ];

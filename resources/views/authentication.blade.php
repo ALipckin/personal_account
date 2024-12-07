@@ -1,20 +1,6 @@
 @extends('layouts.app')
 @section('styles')
     <style>
-        .error {
-            color: red;
-            font-size: 0.9em;
-            display: none;
-        }
-        .error-message {
-            color: red;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-        input.error {
-            border: 2px solid red;
-            background-color: #ffe6e6;
-        }
         .error-message {
             color: red;
             font-size: 0.875em;

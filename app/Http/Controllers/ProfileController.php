@@ -47,8 +47,9 @@ class ProfileController extends Controller
         return view('profile');
     }
 
-    public function index(){
-       // $myComments = Comments::where('user_id', Auth::id())->get();
+    public function index()
+    {
+        // $myComments = Comments::where('user_id', Auth::id())->get();
         $myComments = [];
         return view('profile', compact('myComments'));
     }
@@ -68,33 +69,46 @@ class ProfileController extends Controller
         if (Hash::check($request->input('current_password'), $user->password)) {
             return response()->json(['success' => true], 200);
         } else {
-            return response()->json(['error' => 'Неверный текущий пароль'], 400);
+            return response()->json(['error' => 'Неверный текущий пароль'], 401);
         }
     }
 
     // Функция для изменения пароля
     public function changeMyPassword(Request $request)
     {
-        Log::info("start");
-        // Валидация нового пароля и его подтверждения
-        $request->validate([
-            'current_password' => 'required|string',
-            'new_password' => 'required|string|min:8',  // Минимальная длина пароля, подтверждение
-        ]);
+        try {
+            // Валидация нового пароля и его подтверждения
+            $request->validate([
+                'current_password' => 'required|string',
+                'new_password' => 'required|string|min:2',  // Минимальная длина пароля
+            ]);
 
-        Log::info("changing");
-        // Получаем пользователя
-        $user = Auth::user();
+            // Получаем пользователя
+            $user = Auth::user();
 
-        // Проверяем текущий пароль
-        if (!Hash::check($request->input('current_password'), $user->password)) {
-            return response()->json(['error' => 'Неверный текущий пароль'], 400);
+            // Проверяем текущий пароль
+            if (!Hash::check($request->input('current_password'), $user->password)) {
+                return response()->json([
+                    'status' => 'Неверный текущий пароль',
+                    'status_code' => 400
+                ], 400);
+            }
+
+            // Обновляем пароль пользователя
+            $user->password = bcrypt($request->input('new_password'));
+            $user->save();
+
+            return response()->json([
+                'success' => 'Пароль успешно изменен',
+                'status_code' => 200
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Обработка ошибок валидации
+            return response()->json([
+                'status' => 'Ошибка валидации',
+                'message' => $e->errors(),
+                'status_code' => 422
+            ], 422);
         }
-
-        // Обновляем пароль пользователя
-        $user->password = bcrypt($request->input('new_password'));
-        $user->save();
-
-        return response()->json(['success' => 'Пароль успешно изменен'], 200);
     }
 }
