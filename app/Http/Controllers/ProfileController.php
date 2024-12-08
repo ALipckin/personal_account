@@ -45,7 +45,7 @@ class ProfileController extends Controller
         // Обновляем данные пользователя
         $user->update($updateData);
 
-        return view('profile');
+        return redirect(route('profile.index'));
     }
 
     public function index()

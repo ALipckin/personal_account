@@ -115,6 +115,21 @@
     word-wrap: break-word;
     word-break: break-word;
 }
+
+.comment-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* Ограничиваем до 3 строк */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2em; /* Указываем высоту строки */
+    max-height: calc(3 * 1.2em); /* Ограничиваем до 3 строк */
+}
+
+.dots {
+    display: none; /* Скрыть троеточие по умолчанию */
+}
+
 .comment .button.with-image {
     display: flex;
     gap: 8px;

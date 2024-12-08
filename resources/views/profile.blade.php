@@ -92,53 +92,7 @@
 
     </div>
     <h2>Мои отзывы</h2>
-    @if(isset($myComments))
-        @foreach($myComments as $comment)
-            <div class="comment">
-                <div class="person">
-                    @if(isset($comment->user->photo))
-                        <img class="person--img" src="{{$comment->user->photo}}">
-                    @else
-                        <span class="person--icon">
-                        <img src="{{ asset('/image/Union.png') }}">
-                    </span>
-                    @endif
-                    <span class="person--nickname">{{$comment->user->name}}</span>
-                </div>
-                <div class="date">
-                    {{$comment->created_at->format('Y-m-d')}}
-                </div>
-                <div class="comment--title">
-                    {{$comment->title}}
-                </div>
-                <div class="comment--data">
-                    @php
-                        $commentText = $comment->text;
-                        // Ограничиваем длину текста до 350 символов
-                        $shortText = mb_substr($commentText, 0, 350);
-                        // Проверка, нужно ли показывать кнопку
-                        $showFullButton = mb_strlen($commentText) > 350;
-                    @endphp
-
-                    {{-- Печать ограниченного текста, если нужно --}}
-                    {!! nl2br(e($shortText)) !!}
-
-                    {{-- Показываем троеточие, если текст был обрезан --}}
-                    @if($showFullButton)
-                        <span>...</span>
-                    @endif
-                </div>
-                @if($showFullButton)
-                <div class="buttons">
-                    <div class="button" onclick="openFullCommentModal('{{ $comment->user->name }}', '{{ $comment->user->photo }}', '{{ $comment->title }}', '{{ $comment->text }}')">Читать весь отзыв</div>
-                </div>
-                @endif
-            </div>
-        @endforeach
-    @else
-        Пока нет
-    @endif
-
+    <x-comments-list :comments="$myComments" />
 </div>
 @endsection
 @section('scripts')
