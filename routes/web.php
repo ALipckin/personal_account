@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ProfileController;
-use \App\Http\Controllers\CommentsController;
+use \App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,9 +53,10 @@ Route::group(['namespace' => 'profile', 'prefix' => 'profile', 'middleware' => '
         ->name('profile.password.check');
 });
 
-Route::get('/comments', [CommentsController::class, 'index'])->name('comments');
-Route::post('comment/create', [CommentsController::class, 'store'])
-    ->name('comment.create');
-
-
+Route::get('/comments', [CommentController::class, 'index'])->name('comments');
+Route::post('/comment', [CommentController::class, 'store'])
+    ->name('/comment.create');
+Route::patch('/comment/{id}', [CommentController::class, 'update'])
+   ->name('comment.update');
+//->where('id', '[0-9]+')
 require __DIR__.'/auth.php';

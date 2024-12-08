@@ -79,13 +79,13 @@
         @foreach($comments as $comment)
             <div class="comment">
                 <div class="person">
-                        @if(isset($comment->user->photo))
-                            <img class="person--img" src="{{$comment->user->photo}}">
-                        @else
-                            <span class="person--icon">
-                                <img src="{{ asset('image/Union.png') }}">
-                            </span>
-                          @endif
+                    @if(isset($comment->user->photo))
+                        <img class="person--img" src="{{$comment->user->photo}}">
+                    @else
+                        <span class="person--icon">
+                    <img src="{{ asset('image/Union.png') }}">
+                </span>
+                    @endif
                     <span class="person--nickname">{{$comment->user->name ?? "Гость"}}</span>
                 </div>
                 <div class="date">
@@ -95,13 +95,44 @@
                     {{$comment->title}}
                 </div>
                 <div class="comment--data">
-                    {{$comment->text}}
+                    @php
+                        $commentText = $comment->text;
+                        // Ограничиваем длину текста до 350 символов
+                        $shortText = mb_substr($commentText, 0, 350);
+                        // Проверка, нужно ли показывать кнопку
+                        $showFullButton = mb_strlen($commentText) > 350;
+                    @endphp
+
+                    {{-- Печать ограниченного текста, если нужно --}}
+                    {!! nl2br(e($shortText)) !!}
+
+                    {{-- Показываем троеточие, если текст был обрезан --}}
+                    @if($showFullButton)
+                        <span>...</span>
+                    @endif
                 </div>
+
                 <div class="buttons">
-                    <div class="button" onclick="openFullCommentModal('{{ $comment->user->name ?? "Гость"}}', '{{ $comment->user->photo ?? null }}', '{{ $comment->title }}', '{{ $comment->text }}' )">Читать весь отзыв</div>
+                    {{-- Кнопка редактирования только для авторизованных пользователей и если это их комментарий --}}
+                    @if(isset(auth()->user()->id) && $comment->user_id == auth()->user()->id)
+                        <div class="button with-image" onclick="updateComment('{{ $comment->id ?? "Гость" }}',
+                    '{{ $comment->title }}', '{{ $comment->text }}', '{{ $comment->recommended }}')">
+                            <img src="./image/Review.svg">
+                            Редактировать отзыв
+                        </div>
+                    @endif
+
+                    {{-- Кнопка "Читать весь отзыв", если текст больше 350 символов --}}
+                    @if($showFullButton)
+                        <div class="button" onclick="openFullCommentModal('{{ $comment->user->name ?? "Гость"}}',
+                    '{{ $comment->user->photo ?? null }}', '{{ $comment->title }}', '{{ $comment->text }}' )">
+                            Читать весь отзыв
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach
+
     </div>
     {{ $comments->appends(['sort' => request('sort'), 'search' => request('search'), 'per_page' => request('per_page')])
     ->links('vendor.pagination.default') }}

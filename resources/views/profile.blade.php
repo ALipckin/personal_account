@@ -112,11 +112,27 @@
                     {{$comment->title}}
                 </div>
                 <div class="comment--data">
-                    {{$comment->text}}
+                    @php
+                        $commentText = $comment->text;
+                        // Ограничиваем длину текста до 350 символов
+                        $shortText = mb_substr($commentText, 0, 350);
+                        // Проверка, нужно ли показывать кнопку
+                        $showFullButton = mb_strlen($commentText) > 350;
+                    @endphp
+
+                    {{-- Печать ограниченного текста, если нужно --}}
+                    {!! nl2br(e($shortText)) !!}
+
+                    {{-- Показываем троеточие, если текст был обрезан --}}
+                    @if($showFullButton)
+                        <span>...</span>
+                    @endif
                 </div>
+                @if($showFullButton)
                 <div class="buttons">
                     <div class="button" onclick="openFullCommentModal('{{ $comment->user->name }}', '{{ $comment->user->photo }}', '{{ $comment->title }}', '{{ $comment->text }}')">Читать весь отзыв</div>
                 </div>
+                @endif
             </div>
         @endforeach
     @else

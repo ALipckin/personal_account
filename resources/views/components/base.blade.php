@@ -22,8 +22,10 @@
         window.location = './' + page + '.html';
     }
 
-    function openPopup() {
-        $('#add-comment').removeClass('no-display');
+    function openPopup(name = "Новый отзыв", buttonText = "Отправить отзыв") {
+        $('#popup--title-text').text(name);
+        $('#submitComment').text(buttonText);
+        $('#add-comment').removeClass('no-display'); // Убираем класс
     }
 
     function closePopup() {
@@ -63,22 +65,37 @@
         }, 10);
     };
 
-    function removeError(field){
+    // Функция для удаления ошибки
+    function removeError(field) {
         const passwordField = document.querySelector(field);
-        const errorMessage = passwordField.querySelector('.error-message');
-        errorMessage.textContent = "";
-        passwordField.classList.remove('border-red');
+        if (passwordField) {  // Проверка на существование элемента
+            const errorMessage = passwordField.querySelector('.error-message');
+            if (errorMessage) {
+                errorMessage.textContent = "";  // Очищаем текст ошибки
+            }
+            passwordField.classList.remove('border-red');  // Убираем красную рамку
+        }
     }
 
-    function setError(field, text){
+    // Функция для установки ошибки
+    function setError(field, text) {
         const passwordField = document.querySelector(field);
-        const errorMessage = passwordField.querySelector('.error-message');
-        // Добавляем класс для отображения ошибки
-        passwordField.classList.add('border-red');  // Добавляем красную рамку, например, для выделения ошибки
+        if (passwordField) {  // Проверка на существование элемента
+            const errorMessage = passwordField.querySelector('.error-message');
 
-        if (errorMessage) {
-            // Вставляем текст ошибки в div с классом error-message
-            errorMessage.textContent = text;  // Текст ошибки
+            // Добавляем класс для отображения ошибки
+            passwordField.classList.add('border-red');  // Добавляем красную рамку
+
+            if (errorMessage) {
+                // Вставляем текст ошибки в div с классом error-message
+                errorMessage.textContent = text;  // Текст ошибки
+            } else {
+                // Если нет элемента с классом error-message, можно добавить его динамически
+                const errorDiv = document.createElement('div');
+                errorDiv.classList.add('error-message');
+                errorDiv.textContent = text;
+                passwordField.appendChild(errorDiv);
+            }
         }
     }
 </script>
