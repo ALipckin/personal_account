@@ -2,10 +2,17 @@ function updateComment(id = null, title = '', text = '', recommend = null) {
     pushDataToCommentModal(id, title, text, recommend);
     openPopup('Редактировать отзыв', 'Сохранить');
 }
+function createCommentPopUp(){
+    pushDataToCommentModal();
+    openPopup();
+}
 function pushDataToCommentModal(id = null, title = '', text = '', recommend = null) {
     $('#comment-id').val(id ? id : '');
     $('#title-field input').val(title);
-    $('#text-field textarea').val(text);
+    // Заменяем <br /> на \n для textarea
+    var formattedText = text.replace(/<br\s*\/?>/gi, '\n');
+    $('#text-field textarea').val(formattedText);  // Используем .val() для вставки в textarea
+
 
     if (recommend == 1) {
         $('#recommend-yes').prop('checked', true);
@@ -43,8 +50,6 @@ async function submitComment() {
     await saveCommentData(titleFieldVal, textFieldVal, recommendFieldVal, commentIdFieldVal);
 }
 
-// Привязка обработчика через addEventListener
-document.getElementById('submitComment').addEventListener('click', submitComment);
 async function saveCommentData(title, text, recommend, id = null) {
     console.log("id = ", id);
     const url = id ? `/comment/${id}` : '/comment'; // Определяем URL

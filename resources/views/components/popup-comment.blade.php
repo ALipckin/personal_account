@@ -45,18 +45,5 @@
     </div>
 </div>
 <script>
-    function openFullCommentModal(nickname, photoPath, title, text) {
-        // Заполняем модальное окно данными
-        document.querySelector('#popup-comment .person--nickname').textContent = nickname;
-        document.querySelector('#popup-comment .comment--title').textContent = title;
-        document.querySelector('#popup-comment .comment--data').textContent = text;
-        document.querySelector('#popup-comment .comment--data').textContent = text;
 
-        if(photoPath){
-            document.querySelector('#popup-comment .comment--person-icon').innerHTML =
-            `<img class="person--img" src=${photoPath}>`;
-        }
-
-        document.getElementById('popup-comment').classList.remove('no-display');
-    }
 </script>

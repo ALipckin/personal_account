@@ -34,15 +34,20 @@
             {{-- Кнопка редактирования только для авторизованных пользователей и если это их комментарий --}}
             @if(isset(auth()->user()->id) && $comment->user_id == auth()->user()->id)
                 <div class="button with-image" onclick="updateComment('{{ $comment->id ?? "Гость" }}',
-                    '{{ $comment->title }}', '{{ $comment->text }}', '{{ $comment->recommended }}')">
+            '{{ addslashes($comment->title) }}',
+            '{{ str_replace(["\r\n", "\r", "\n"], "<br />", $comment->text) }}',
+            '{{ $comment->recommended }}')">
                     <img src="./image/Review.svg">
                     Редактировать отзыв
                 </div>
             @endif
 
             {{-- Кнопка "Читать весь отзыв", если текст больше 350 символов или более 3 строк --}}
-            <div class="button" id="read-more-{{$comment->id}}" style="display:none;" onclick="openFullCommentModal('{{ $comment->user->name ?? "Гость"}}',
-                '{{ $comment->user->photo ?? null }}', '{{ $comment->title }}', '{{ $comment->text }}' )">
+            <div class="button" id="read-more-{{$comment->id}}" style="display:none;" onclick="openFullCommentModal(
+    '{{ e($comment->user->name ?? "Гость") }}',
+    '{{ $comment->user->photo ?? null }}',
+    '{{ addslashes($comment->title) }}',
+    '{{ str_replace(["\r\n", "\r", "\n"], "<br />", $comment->text)}}')">
                 Читать весь отзыв
             </div>
         </div>
@@ -50,6 +55,22 @@
 @endforeach
 <script src="{{ asset('scripts/comments.js') }}"></script>
 <script>
+    function openFullCommentModal(nickname, photoPath, title, text) {
+        // Заполняем модальное окно данными
+        document.querySelector('#popup-comment .person--nickname').textContent = nickname;
+        document.querySelector('#popup-comment .comment--title').textContent = title;
+
+        // Используем innerHTML, чтобы отобразить текст с тегами <br />
+        document.querySelector('#popup-comment .comment--data').innerHTML = text;
+
+        if (photoPath) {
+            document.querySelector('#popup-comment .comment--person-icon').innerHTML =
+                `<img class="person--img" src="${photoPath}">`;
+        }
+
+        document.getElementById('popup-comment').classList.remove('no-display');
+    }
+
     function handleSearch(event) {
         if (event.key === 'Enter') {
             const searchQuery = event.target.value.trim(); // Получаем текст из input
