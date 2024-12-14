@@ -40,10 +40,12 @@
     <div class="counts">
         <span>Показывать по:</span>
         @foreach ([10, 20, 50] as $count)
-            @if ($count == request('per_page')) {{-- Укажите значение по умолчанию --}}
-            <span class="count active">{{ $count }}</span>
+            @if ($count == request('per_page'))
+                <span class="count active">{{ $count }}</span>
             @else
-                <a class="count" href="{{ request()->fullUrlWithQuery(['per_page' => $count]) }}">{{ $count }}</a>
+                <a class="count" href="{{ url()->current() }}?{{ http_build_query(request()->except(['page', 'per_page']) + ['per_page' => $count]) }}">
+                    {{ $count }}
+                </a>
             @endif
         @endforeach
     </div>
