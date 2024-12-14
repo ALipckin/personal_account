@@ -3,7 +3,8 @@
 Installation:
 
 - docker-compose build
-- docker-compose up
+- docker-compose up -d
+- sudo chmod -R 777 ./storage/
 - docker exec -it test_app bash
 - composer install
 - php artisan key:generate

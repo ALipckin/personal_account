@@ -7,9 +7,8 @@
         <div class="right-block">
             <div class="button primary" onclick="openPopup()">
                 <img class="add--icon" src="{{ asset('image/Plus.png') }}">
-                <span class="add--text show-add-comment" onclick="openPopup()">Добавить отзыв</span>
+                <span class="add--text show-add-comment" onclick="createCommentPopUp()">Добавить отзыв</span>
             </div>
-
 
                 <div class="button" onclick="window.location.href='{{ route('auth.login') }}'" not-authorized>
                     Войти
