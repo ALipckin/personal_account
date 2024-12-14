@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('title');
             $table->text('text');
-            $table->boolean('recommended')->default(false);
+            $table->boolean('recommended')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

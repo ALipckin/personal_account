@@ -44,11 +44,12 @@ class CommentController
 
             // Получаем идентификатор авторизованного пользователя
             $userId = Auth::id();
-
+            Log::info("user id = ". $userId);
             // Если пользователь авторизован, присваиваем его id в данных
             $validatedData['user_id'] = $userId ?? null;
-
+            $validatedData['recommended'] = null;
             if (array_key_exists('recommended', $validatedData) && $userId) {
+                Log::info("saving recommended");
                 $validatedData['recommended'] = $validatedData['recommended'] ?? false;
             }
 
@@ -63,16 +64,14 @@ class CommentController
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Обработка ошибок валидации
             return response()->json([
-                'status' => 'Ошибка валидации',
+                'status' => 'Validation error',
                 'message' => $e->errors(),
-                'status_code' => 422
             ], 422);
         }
     }
 
     public function update(Request $request, $id)
     {
-        Log::info("start update");
         try {
             // Определяем правила валидации
             $validatedData = $request->validate([
@@ -81,7 +80,6 @@ class CommentController
                 'recommended' => 'nullable|boolean',
             ]);
 
-            Log::info("comment id = ". $id);
             // Находим комментарий по id
             $comment = Comment::findOrFail($id);
 
@@ -91,7 +89,6 @@ class CommentController
                 return response()->json([
                     'status' => 'error',
                     'message' => 'You do not have permission to update this comment.',
-                    'status_code' => 403
                 ], 403);
             }
 
@@ -109,23 +106,20 @@ class CommentController
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Обработка ошибок валидации
             return response()->json([
-                'status' => 'Ошибка валидации',
+                'status' => 'Validation error',
                 'message' => $e->errors(),
-                'status_code' => 422
             ], 422);
         } catch (ModelNotFoundException $e) {
             // Если комментарий не найден
             return response()->json([
-                'status' => 'error',
+                'status' => 'Error',
                 'message' => 'Comment not found',
-                'status_code' => 404
             ], 404);
         } catch (\Exception $e) {
             // Обработка других ошибок
             return response()->json([
-                'status' => 'Ошибка',
+                'status' => 'Error',
                 'message' => $e->getMessage(),
-                'status_code' => 500
             ], 500);
         }
     }

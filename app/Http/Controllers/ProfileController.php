@@ -69,7 +69,7 @@ class ProfileController extends Controller
         if (Hash::check($request->input('current_password'), $user->password)) {
             return response()->json(['success' => true], 200);
         } else {
-            return response()->json(['error' => 'Неверный текущий пароль'], 401);
+            return response()->json(['error' => 'Incorrect password'], 401);
         }
     }
 
@@ -89,8 +89,7 @@ class ProfileController extends Controller
             // Проверяем текущий пароль
             if (!Hash::check($request->input('current_password'), $user->password)) {
                 return response()->json([
-                    'status' => 'Неверный текущий пароль',
-                    'status_code' => 400
+                    'status' => 'Incorrect password',
                 ], 400);
             }
 
@@ -99,13 +98,12 @@ class ProfileController extends Controller
             $user->save();
 
             return response()->json([
-                'success' => 'Пароль успешно изменен',
-                'status_code' => 200
+                'success' => 'Password was successfully changed',
             ], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Обработка ошибок валидации
             return response()->json([
-                'status' => 'Ошибка валидации',
+                'status' => 'Validation error',
                 'message' => $e->errors(),
                 'status_code' => 422
             ], 422);

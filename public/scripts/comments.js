@@ -34,7 +34,7 @@ async function submitComment() {
     removeError(recommendFieldId);
 
     // Проверка, чтобы все обязательные поля были заполнены
-    if (!titleFieldVal || !textFieldVal || !recommendFieldVal) {
+    if (!titleFieldVal || !textFieldVal) {
         alert('Пожалуйста, заполните все обязательные поля');
         return;
     }
