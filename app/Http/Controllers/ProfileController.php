@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\UpdatePasswordRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -15,23 +15,18 @@ class ProfileController extends Controller
     {
         $data = $request->validated();
 
-        // Получаем текущего пользователя
         $user = Auth::user();
 
-        // Получаем файл из запроса
         $file = $request->file('photo');
-        $filename = null;  // Инициализируем переменную для имени файла
+        $filename = null;
 
         if (!empty($file)) {
-            // Генерируем уникальное имя для файла
             $filename = $user->id . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/img/photo/', $filename);
         }
 
-        // Создаем массив с данными для обновления
         $updateData = [];
 
-        // Обновляем только те поля, которые не пустые
         if (!empty($data['email'])) {
             $updateData['email'] = $data['email'];
         }
@@ -42,7 +37,6 @@ class ProfileController extends Controller
             $updateData['photo'] = '/storage/img/photo/' . $filename;
         }
 
-        // Обновляем данные пользователя
         $user->update($updateData);
 
         return redirect(route('profile.index'));
@@ -54,18 +48,14 @@ class ProfileController extends Controller
         return view('profile', compact('myComments'));
     }
 
-    // Функция для проверки текущего пароля
     public function checkMyPassword(Request $request)
     {
-        // Валидируем текущий пароль
         $request->validate([
             'current_password' => 'required|string',
         ]);
 
-        // Получаем пользователя
         $user = Auth::user();
 
-        // Проверяем, совпадает ли текущий пароль с хешированным
         if (Hash::check($request->input('current_password'), $user->password)) {
             return response()->json(['success' => true], 200);
         } else {
@@ -73,40 +63,22 @@ class ProfileController extends Controller
         }
     }
 
-    // Функция для изменения пароля
-    public function changeMyPassword(Request $request)
+    public function changeMyPassword(UpdatePasswordRequest $request)
     {
-        try {
-            // Валидация нового пароля и его подтверждения
-            $request->validate([
-                'current_password' => 'required|string',
-                'new_password' => 'required|string|min:2',  // Минимальная длина пароля
-            ]);
+        $data = $request->validated();
+        $user = Auth::user();
 
-            // Получаем пользователя
-            $user = Auth::user();
-
-            // Проверяем текущий пароль
-            if (!Hash::check($request->input('current_password'), $user->password)) {
-                return response()->json([
-                    'status' => 'Incorrect password',
-                ], 400);
-            }
-
-            // Обновляем пароль пользователя
-            $user->password = bcrypt($request->input('new_password'));
-            $user->save();
-
+        if (!Hash::check($request->input('current_password'), $user->password)) {
             return response()->json([
-                'success' => 'Password was successfully changed',
-            ], 200);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Обработка ошибок валидации
-            return response()->json([
-                'status' => 'Validation error',
-                'message' => $e->errors(),
-                'status_code' => 422
-            ], 422);
+                'status' => 'Incorrect password',
+            ], 400);
         }
+
+        $user->password = bcrypt($data['new_password']);
+        $user->save();
+
+        return response()->json([
+            'success' => 'Password was successfully changed',
+        ], 200);
     }
 }
