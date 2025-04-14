@@ -5,10 +5,10 @@ services:
             - ./:/var/www
             - ./_docker/nginx/conf.d:/etc/nginx/conf.d
         ports:
-            - "8876:80"
+            - "8880:80"
         depends_on:
             - app
-        container_name: test_app_nginx
+        container_name: pers_acc_nginx
     app:
         build:
             context: .
@@ -17,7 +17,7 @@ services:
             - ./:/var/www
         depends_on:
             - db
-        container_name: test_app
+        container_name: pers_acc_app
         extra_hosts:
             - "host.docker.internal:host-gateway"
     db:
@@ -26,9 +26,9 @@ services:
         volumes:
             - ./tmp/db:/var/lib/mysql
         environment:
-            MYSQL_DATABASE: test_db
+            MYSQL_DATABASE: pers_acc_db
             MYSQL_ROOT_PASSWORD: root
         ports:
-            - 8105:3306
+            - "8105:3306"
         command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-        container_name: test_db
+        container_name: pers_acc_db
